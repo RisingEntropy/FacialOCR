@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -37,7 +38,7 @@ public class AIService {
             logger.info("AI engine ready");
         }
     }
-    @RequestMapping("/ai/detect")
+    @RequestMapping(value = "/ai/detect", method = RequestMethod.POST)
     public String handleRequest(@RequestParam("img")String imgBase64,
                                 @RequestParam(value = "norm_threshold", required = false, defaultValue = "0.85")float confThreshold){
         logger.trace("New Request established");
@@ -48,5 +49,9 @@ public class AIService {
             logger.info("A wrong inferring occurred");
         }
         return res.toJson();
+    }
+    @RequestMapping(value="/ai/test", method = RequestMethod.POST)
+    public String AITest(@RequestParam("img")String imgBase64){
+        return "echo:"+imgBase64;
     }
 }

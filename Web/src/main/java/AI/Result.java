@@ -64,7 +64,7 @@ public class Result implements Serializable {
         for(int i = 0;i<this.candidates.size();i++){
             JSONObject candi = new JSONObject();
             candi.put("character",candidates.get(i));
-            candi.put("nrom",candidate_norms.get(i));
+            candi.put("norm",candidate_norms.get(i));
             candidate.add(candi);
         }
         json.put("candicates",candidate);

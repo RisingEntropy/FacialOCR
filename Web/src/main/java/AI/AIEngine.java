@@ -7,12 +7,14 @@ import ai.djl.repository.zoo.ZooModel;
 import ai.djl.translate.TranslateException;
 import io.jhdf.HdfFile;
 import io.jhdf.api.Node;
+import org.springframework.core.io.ClassPathResource;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class AIEngine {
     private String modelPath;
@@ -28,14 +30,17 @@ public class AIEngine {
     public AIEngine(){
 
     }
-    public boolean initialize(String modelPath){
+    public void initialize(String modelPath) throws IOException {
         this.modelPath = modelPath;
         this.translator = new Base64Translator();
         if(initialized)
-            return true;
+            return;
+        FileOutputStream tmp = new FileOutputStream("./model.pth");
+        tmp.write(new ClassPathResource(modelPath).getInputStream().readAllBytes());
+        tmp.close();
         this.criteria = Criteria.builder()
                 .setTypes(String.class, float[].class)
-                .optModelPath(Paths.get(this.modelPath))
+                .optModelPath(Paths.get("./model.pth"))
                 .optOption("mapLocation", "true")
                 .optTranslator(translator)
                 .build();
@@ -43,10 +48,10 @@ public class AIEngine {
             this.model = criteria.loadModel();
             this.predictor = this.model.newPredictor();
             this.initialized = true;
-            return true;
         } catch (IOException | MalformedModelException | ModelNotFoundException e) {
             e.printStackTrace();
-            return false;
+        }finally {
+            new File("./model.pth").delete();
         }
     }
     public boolean isDatabaseLoaded(){
@@ -55,8 +60,16 @@ public class AIEngine {
     public boolean engineOK(){
         return this.initialized&&this.databse_loaded;
     }
-    public boolean loadDatabase(String path){
-        try(HdfFile file = new HdfFile(Paths.get(path))){
+    public void loadDatabase(String path){
+        FileOutputStream out = null;
+        try {
+            out = new FileOutputStream("./database.h5");
+            out.write(new ClassPathResource(path).getInputStream().readAllBytes());
+            out.close();
+        } catch (IOException e) {
+            return;
+        }
+        try(HdfFile file = new HdfFile(Paths.get("./database.h5"))){
             this.unicodes = new ArrayList<>();
             for(Node node:file){
                 unicodes.add(Integer.valueOf(node.getName()));
@@ -66,9 +79,11 @@ public class AIEngine {
                 database[i] = (float[]) file.getDatasetByPath("/"+unicodes.get(i)).getData();
             }
             this.databse_loaded = true;
-            return true;
         }catch (Exception e){
-            return false;
+            e.printStackTrace();
+            return;
+        }finally {
+            new File("./database.h5").delete();
         }
     }
     public boolean isInitialized(){

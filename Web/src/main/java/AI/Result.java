@@ -2,6 +2,11 @@ package AI;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Objects;
+
+import ai.djl.util.Pair;
 import com.alibaba.fastjson2.*;
 public class Result implements Serializable {
     private String bestMatch = null;
@@ -59,15 +64,20 @@ public class Result implements Serializable {
         }
         json.put("status","OK");
         json.put("bestMatch",this.bestMatch);
-        json.put("norm",this.norm);
+        json.put("norm",String.format("%.2f", this.norm));
         JSONArray candidate = new JSONArray();
+        ArrayList<Pair<String,Float> > list = new ArrayList<>();
         for(int i = 0;i<this.candidates.size();i++){
+            list.add(new Pair<>(candidates.get(i),candidate_norms.get(i)));
+        }
+        list.sort((a, b) -> Objects.equals(a.getValue(), b.getValue()) ? 0 : a.getValue().compareTo(b.getValue()));
+        for(int i = 0;i<list.size();i++){
             JSONObject candi = new JSONObject();
-            candi.put("character",candidates.get(i));
-            candi.put("norm",candidate_norms.get(i));
+            candi.put("character",list.get(i).getKey());
+            candi.put("norm",String.format("%.2f", list.get(i).getValue()));
             candidate.add(candi);
         }
-        json.put("candicates",candidate);
+        json.put("candidates",candidate);
         return json.toJSONString();
     }
 }

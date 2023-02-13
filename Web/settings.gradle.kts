@@ -1,1 +1,1 @@
-rootProject.name = "Web"
+rootProject.name = "RUCD"

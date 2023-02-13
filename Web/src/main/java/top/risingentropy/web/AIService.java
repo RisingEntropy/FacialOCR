@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
+
 @RestController
 public class AIService {
     @Value("${AI.model_path}")
@@ -24,7 +26,7 @@ public class AIService {
     private AIEngine engine;
     private Logger logger = LoggerFactory.getLogger(AIService.class);
     @PostConstruct
-    public void init(){
+    public void init() throws IOException {
         this.engine = new AIEngine();
         engine.initialize(modelPath);
         engine.loadDatabase(databasePath);

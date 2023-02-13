@@ -36,15 +36,15 @@ function selectImage(input){
 function parseResponse(response){
     var table = document.getElementById("result_table")
     var res = JSON.parse(response)
-    console.log(table)
     table.deleteRow(0)
     best_line = table.insertRow(0)
     best_line.insertCell(0).innerHTML="最佳结果:"+res.bestMatch
     best_line.insertCell(1).innerHTML="l2范数:"+res.norm
-    var arr = res.candicates
+    var arr = res.candidates
     for(i=0;i<arr.length;i++){
         line = table.insertRow(i+1)
         line.insertCell(0).innerHTML="备选结果:"+arr[i].character
         line.insertCell(1).innerHTML="l2范数:"+arr[i].norm
     }
+    document.getElementById("file_selector").value=null
 }

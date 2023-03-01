@@ -2,33 +2,90 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Rarely Used Character Detector(RUCD)</title>
+    <title>Rarely Used Character Detector (RUCD)</title>
     <meta name="RUCD" content="生僻字识别">
     <style>
-        .parent{
-            background:darkgray;
-            text-align:center;
+        .parent {
+            background: darkgray;
+            text-align: center;
         }
-        .table{
+
+        .table {
             margin: auto;
             border: 1px solid black;
             padding: 2px;
         }
+        #example{
+            columns: 3
+        }
     </style>
 </head>
 <body class="parent">
-    <label>选择要上传的文字图片，图片尽量完整的包含文字且尽量减少无关背景</label>
-    <br>
-    <input type="file" onchange="selectImage(this)" name="select an image" accept="image/*"
-           style="text-align:center;vertical-align:middle;" id="file_selector">
-    <br>
-    <img id="img_window" width="112" height="112">
-    <br>
-    <table id="result_table" class="table">
-        <tr>
-            <td>请上传图片进行识别</td>
-        </tr>
-    </table>
+<h2>Character detection is not supported yet!
+    <br>So please crop out background as much as possible</h2>
+
+
+<br>
+<img src="guide.png" width="454" height="200">
+<br>
+<label>Please select an image to recognize</label>
+<br>
+<input type="file" onchange="selectImage(this)" name="select an image" accept="image/*"
+       style="text-align:center;vertical-align:middle;" id="file_selector">
+<br>
+<img id="img_window" width="112" height="112">
+<br>
+<table id="result_table" class="table">
+    <tr>
+        <td>No image chosen</td>
+    </tr>
+</table>
+<br>
+<h3 style="color: #AA0000">Here are some examples.</h3>
+<br>
+<div>
+    <!-- Example 1-->
+    <div style="display:inline-block">
+        <p>Example 1</p>
+        <img src="example%201.png" width="112" height="112" id="img1" alt="An example">
+        <br>
+        <button id="example1" type="button"  onclick="example(1)">Detect</button>
+        <br>
+        <table id="example_tab_1" class="table">
+            <tr>
+                <td>Press detect to see the result</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Example 2-->
+    <div style="display:inline-block">
+        <p>Example 2</p>
+        <img src="example%202.png" width="112" height="112" id="img2" alt="An example">
+        <br>
+        <button id="example2" type="button"  onclick="example(2)">Detect</button>
+        <br>
+        <table id="example_tab_2" class="table">
+            <tr>
+                <td>Press detect to see the result</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Example 3-->
+    <div style="display:inline-block">
+        <p>Example 3</p>
+        <img src="example%203.png" width="112" height="112" id="img3" alt="An example">
+        <br>
+        <button id="example3" type="button" onclick="example(3)">Detect</button>
+        <br>
+        <table id="example_tab_3" class="table">
+            <tr>
+                <td>Press detect to see the result</td>
+            </tr>
+        </table>
+    </div>
+</div>
 </body>
 <script type="text/javascript" src="upload.js"></script>
 </html>

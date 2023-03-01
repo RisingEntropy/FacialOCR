@@ -9,8 +9,10 @@ import java.util.Objects;
 import ai.djl.util.Pair;
 import com.alibaba.fastjson2.*;
 public class Result implements Serializable {
+    private static final int MAX_HOLD = 5;
     private String bestMatch = null;
     private float norm = 1e9f;
+
 
     private final ArrayList<String> candidates;
     private final ArrayList<Float> candidate_norms;
@@ -71,7 +73,7 @@ public class Result implements Serializable {
             list.add(new Pair<>(candidates.get(i),candidate_norms.get(i)));
         }
         list.sort((a, b) -> Objects.equals(a.getValue(), b.getValue()) ? 0 : a.getValue().compareTo(b.getValue()));
-        for(int i = 0;i<list.size();i++){
+        for(int i = 0;i<Math.min(list.size(), MAX_HOLD);i++){
             JSONObject candi = new JSONObject();
             candi.put("character",list.get(i).getKey());
             candi.put("norm",String.format("%.2f", list.get(i).getValue()));
